@@ -10,7 +10,7 @@ CommentableModel = LikeableModel.extend();
  */
 CommentableModel.prototype.addComment = function (body) {
     var type = this._objectType;
-    CommentsCollection.insert({body:body, userId:Meteor.userId(), linkedObjectId:this._id, objectType:type});
+    new Comment().save({body:body, linkedObjectId:this._id, objectType:type});
 };
 
 /**
