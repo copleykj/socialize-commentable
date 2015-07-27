@@ -10,7 +10,7 @@ CommentableModel = LikeableModel.extend();
  */
 CommentableModel.prototype.addComment = function (body) {
     var type = this._objectType;
-    new Comment().save({body:body, linkedObjectId:this._id, objectType:type});
+    new Comment({body:body, linkedObjectId:this._id, objectType:type}).save();
 };
 
 /**
