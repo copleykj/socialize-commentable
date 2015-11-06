@@ -5,10 +5,9 @@
 Comment = LinkableModel.extendAndSetupCollection("comments");
 
 //extend comment with CommentableModel to make it commentable
-_.extend(Comment.prototype, CommentableModel.prototype);
+CommentableModel.makeCommentable(Comment, "comment");
 
-//register Comment as linkable type
-LinkableModel.registerLinkableType(Comment, "comment");
+LikeableModel.makeLikeable(Comment, "comment");
 
 /**
  * The user that made the comment
@@ -47,6 +46,4 @@ Comment.appendSchema({
     }
 });
 
-Comment.appendSchema(CommentableModel.CommentableSchema);
-Comment.appendSchema(LikeableModel.LikeableSchema);
 Comment.appendSchema(LinkableModel.LinkableSchema);
