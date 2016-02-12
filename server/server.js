@@ -9,13 +9,13 @@ CommentsCollection.allow({
 
 CommentsCollection.after.insert(function (userId, comment) {
     //when a comment is added, update the comment count for the object being commented on
-    var collection = Comment.getCollectionForRegisteredType(comment.objectType);
+    var collection = LinkableModel.getCollectionForRegisteredType(comment.objectType);
     collection && collection.update(comment.linkedObjectId, {$inc:{_commentCount:1}});
 });
 
 CommentsCollection.after.remove(function (userId, comment) {
     //when a comment is deleted, update the comment count for the object being commented on
-    var collection = Comment.getCollectionForRegisteredType(comment.objectType);
+    var collection = LinkableModel.getCollectionForRegisteredType(comment.objectType);
     collection && collection.update(comment.linkedObjectId, {$inc:{_commentCount:-1}});
 
     //if there are any likes or comments for the deleted comment, delete them

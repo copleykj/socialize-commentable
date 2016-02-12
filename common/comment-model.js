@@ -2,7 +2,9 @@
  * A model for a comment which can be linked to many other database objects
  * @class Comment
  */
-Comment = LinkableModel.extendAndSetupCollection("comments");
+Comment = BaseModel.extendAndSetupCollection("comments");
+
+LinkableModel.makeLinkable(Comment);
 
 //extend comment with CommentableModel to make it commentable
 CommentableModel.makeCommentable(Comment, "comment");
