@@ -1,29 +1,16 @@
-/**
- * A model for a comment which can be linked to many other database objects
- * @class Comment
- */
-Comment = BaseModel.extendAndSetupCollection("comments");
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { BaseModel } from 'meteor/socialize:base-model';
+import { LinkableModel, ParentLInk } from 'meteor/socialize:linkable-model';
+import { LikeableModel } from 'meteor/socialize:likeable';
+import { CommentableModel } from './commentable-model'
 
-LinkableModel.makeLinkable(Comment);
+//Collection to store comments
+export const CommentsCollection = new Mongo.Collection("comments");
 
-//extend comment with CommentableModel to make it commentable
-CommentableModel.makeCommentable(Comment, "comment");
-
-LikeableModel.makeLikeable(Comment, "comment");
-
-/**
- * The user that made the comment
- * @returns {User} A User instance representing the commenting user.
- */
-Comment.prototype.user = function () {
-    return Meteor.users.findOne(this.userId);
-};
-
-//create the CommentsCollection and set a reference to Comment.prototype._collection so BaseModel knows how to find it
-CommentsCollection = Comment.collection;
-
-//create the schema
-Comment.appendSchema({
+//Create the schema for the comment
+const CommentSchema = new SimpleSchema({
     "userId":{
         type:String,
         regEx:SimpleSchema.RegEx.Id,
@@ -48,4 +35,36 @@ Comment.appendSchema({
     }
 });
 
+/**
+ * A model for a comment which can be linked to many other database objects
+ * @class Comment
+ * @extends ParentLink
+ * @implements CommentableModel, LikeableModel, LinkableModel
+ */
+export class Comment extends CommentableModel(LikeableModel(LinkableModel(ParentLink))){
+    constructor(document){
+        super(document)
+    }
+
+    /**
+     * The user that made the comment
+     * @returns {User} A User instance representing the commenting user.
+     */
+    user() {
+        return Meteor.users.findOne(this.userId);
+    };
+
+}
+
+//attach the schema
+CommentsCollection.attachSchema(CommentSchema);
+
+//attach the CommentsCollection to the Comment class so we can use BaseModel's CRUD methods
+Comment.attachCollection(CommentsCollection);
+
+//add fields to schema required by LinkableModel
 Comment.appendSchema(LinkableModel.LinkableSchema);
+//add fields to schema required by CommentableModel
+Comment.appendSchema(CommentableModel.CommentableSchema);
+//add fields to schema required by LikeableModel
+Comment.appendSchema(LikeableModel.LikeableSchema);

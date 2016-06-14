@@ -1,3 +1,6 @@
+import { CommentsCollection } from './comment-model';
+import { LinkableModel } from 'meteor/socialize:linkable-model';
+
 CommentsCollection.allow({
     insert: function (userId, comment) {
         return userId && comment.checkOwnership();

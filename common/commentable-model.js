@@ -1,25 +1,29 @@
-CommentableModel = {};
+import { _ } from 'meteor/underscore';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Comment, CommentsCollection } from './comment-model';
 
-CommentableModel.makeCommentable = function (model, type) {
-    if(model.appendSchema && type){
-        model.appendSchema(commentableSchema);
-        LinkableModel.registerLinkableType(model, type);
-        _.extend(model.prototype, commentableMethods);
-    }else {
-        throw new Meteor.Error("makeCommentableFailed", "Could not make model commentable. Please make sure you passed in a model and type");
+
+/**
+ * CommentableModel - a mixin providing commentable behavior for a model
+ */
+export const CommentableModel = Base => class extends Base {
+    constructor(document){
+        super(document);
+        if(!(this instanceof ParentLink)){
+            throw new Meteor.Error("MustExtendParentLink", "LikeableModel must extend ParentLink from socialize:linkable-model");
+        }
     }
-};
 
-
-var commentableMethods = {
     /**
      * Create and link a comment
      * @param {String} body The body text of the comment
      */
-    addComment: function (body) {
-        var type = this._objectType;
-        new Comment({body:body, linkedObjectId:this._id, objectType:type}).save();
-    },
+    addComment(body) {
+        var comment = this.getLinkObject();
+        comment.body = body;
+
+        new Comment(comment).save();
+    }
 
     /**
      * Get the comments for a model that is able to be commented on
@@ -29,7 +33,7 @@ var commentableMethods = {
      * @param   {Number}       sortOrder The order in which to sort. 1 for ascending and -1 for descending
      * @returns {Mongo.Cursor} A cursor that returns comment instances
      */
-    comments: function(limit, skip, sortBy, sortOrder){
+    comments(limit, skip, sortBy, sortOrder) {
         var options = {};
 
         if (limit) {
@@ -46,20 +50,20 @@ var commentableMethods = {
         }
 
         return CommentsCollection.find({linkedObjectId:this._id}, options);
-    },
+    }
 
     /**
      * The number of comments on the commentable object
      * @returns {Number} The number of comments
      */
-    commentCount: function(){
+    commentCount() {
         //Necessary  for backwards compatibility with old comments
         return _.isArray(this._commentCount) ? this._commentCount.length : this._commentCount || 0;
     }
 };
 
 //create a schema which can be attached to other commentable types
-var commentableSchema = new SimpleSchema({
+CommentableModel.CommentableSchema = new SimpleSchema({
     "_commentCount":{
         type:Number,
         defaultValue:0,
