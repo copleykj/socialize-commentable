@@ -1,41 +1,83 @@
 # Commentable #
 
-A package enabling the creation of models that can be commented on. For example a photo in an photo album could have comments, but also a post to a users feed could as well. Rather than maintaining a photo comments collection and a post comments collection we can implement CommentableModel on our `Post` and `Photo` models and then use it's new methds `addcomment`, `comments`, and `commentCount`.
+This package enables the creation of models that can be commented on. For example a photo in an photo album could have comments, but also a post to a users feed could as well. Rather than maintaining a photo comments collection and a post comments collection we can implement CommentableModel on our `Post` and `Photo` models and then use it's new methods to store and retrieve comments and information about them, linked to these models.
 
-## CommentableModel ##
+## Installation ##
 
-CommentableModel is used to add commenting capabilities to a model that is built on Socialize's `BaseModel` class. To make a model commentable just call `CommentableModel.makeCommentable(Model, "typeAsString")` passing in a model class and a string that will be used to tag the comment records for later retrieval.
-
-```javascript
-var Post = BaseModel.extendAndSetupCollection("posts");
-
-CommentableModel.makeCommentable(Post, "post");
+```
+meteor add socialize:commentable
 ```
 
-This will add the following methods to the prototype of the model.
-
-**addComment(body)** - create a comment that is linked this instance of a model.
-
-**comments(limit, skip, sortKey, sortOrder)** - returns a cursor of comments that are linked to this instance of a model.
-
-**commentCount()** - returns the number of comments for this instance of a model.
+## Basic Usage ##
 
 ```javascript
-var post = Meteor.posts.findOne();
+import { Mongo } from 'meteor/mongo';
+import { CommentableModel } from 'meteor/socialize-commentable';
+import { LinkParent, LinkableModel } from 'meteor/socialize-linkable';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-post.addComment("Post Comments are so cool, and easy to implement with the socialize:commentable package");
+//define the collection to hold products
+const PhotosCollection = new Mongo.Collection("photos");
 
-post.comments(null, null, "date", -1).forEach(function(comment){
-    console.log(comment.user().username, ": ", comment.body);
+//define the schema for a product
+const PhotosSchema = new SimpleSchema({
+    "userId":{
+        type:String,
+        regEx:SimpleSchema.RegEx.Id,
+        autoValue:function () {
+            if(this.isInsert){
+                return this.userId;
+            }
+        },
+        denyUpdate:true
+    },
+    "date":{
+        type:Date,
+        autoValue:function() {
+            if(this.isInsert){
+                return new Date();
+            }
+        },
+        denyUpdate:true
+    }
+    //actual schema truncated for brevity
 });
 
-post.commentCount(); //=> 0
+//Create a product class extending LikeableModel and LinkParent
+class Photo extends CommentableModel(LinkParent) {
+    constructor(document){
+        super(document);
+    }
+
+    //Add any instance(helper) methods here
+}
+
+//Attach the collection to the model so we can use BaseModel's CRUD methods
+Photo.attachCollection(PhotosCollection);
+
+//Register the Model as a potential Parent of a LinkableModel
+LinkableModel.registerParentModel(Photo);
+
+
+//Create a new product and save it to the database using BaseModel's save method.
+new Photo({caption:"Meteor Camp 2016!", cloudinaryId:"sL0Jbf3gBaoeubs3G822WQqwp"}).save();
+
+//Get an instance of Product using a findOne call.
+let foundPhoto = PhotosCollection.findOne();
+
+//Post a comment that will be linked to the photo.
+foundPhoto.addComment("This was so much fun!");
+
+//Find out how many comments the photo has.
+foundPhoto.commentCount(); // -> 1
+
+//Get a cursor of comments for this photo
+foundPhoto.comments().forEach((comment) => {
+    console.log(`${comment.user().username}: ${comment.body}`);
+});
 ```
 
-## Comment  - Extends [LinkableModel](https://github.com/copleykj/socialize-linkable-model) - Implements [CommentableModel](https://github.com/copleykj/socialize-commentable), [LikeableModel](https://github.com/copleykj/socialize-likeable)##
+# Supporting the Project #
+In the spirit of keeping this and all of the packages in the [Socialize](https://atmospherejs.com/socialize) set alive, I ask that if you find this package useful, please donate to it's development.
 
-A comment is a record of a user commenting on an instance of a model with a reference to that instance. The `Comment` model also implements `CommentableModel` and `LikeableModel` so that comments can be liked as well as commented on. If you choose to use the package in this fashion, be careful how far you allow the nesting of comments.
-
-### Instance Methods ###
-
-**user()** - Returns an instance of the user that made the comment,
+[Paypal](https://www.paypal.me/copleykj) /  [Bitcoin](https://www.coinbase.com/checkouts/4a52f56a76e565c552b6ecf118461287)
