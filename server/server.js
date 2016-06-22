@@ -1,4 +1,4 @@
-import { CommentsCollection } from './comment-model';
+import { CommentsCollection } from '../common/comment-model';
 import { LinkableModel } from 'meteor/socialize:linkable-model';
 
 CommentsCollection.allow({

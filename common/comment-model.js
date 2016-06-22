@@ -2,9 +2,11 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { BaseModel } from 'meteor/socialize:base-model';
-import { LinkableModel, ParentLInk } from 'meteor/socialize:linkable-model';
+import { LinkableModel, LinkParent } from 'meteor/socialize:linkable-model';
 import { LikeableModel } from 'meteor/socialize:likeable';
 import { CommentableModel } from './commentable-model'
+
+console.log(LinkableModel, )
 
 //Collection to store comments
 export const CommentsCollection = new Mongo.Collection("comments");
@@ -41,7 +43,7 @@ const CommentSchema = new SimpleSchema({
  * @extends ParentLink
  * @implements CommentableModel, LikeableModel, LinkableModel
  */
-export class Comment extends CommentableModel(LikeableModel(LinkableModel(ParentLink))){
+export class Comment extends CommentableModel(LikeableModel(LinkableModel(LinkParent))){
     constructor(document){
         super(document)
     }
