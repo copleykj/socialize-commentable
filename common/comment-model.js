@@ -4,9 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { BaseModel } from 'meteor/socialize:base-model';
 import { LinkableModel, LinkParent } from 'meteor/socialize:linkable-model';
 import { LikeableModel } from 'meteor/socialize:likeable';
-import { CommentableModel } from './commentable-model'
-
-console.log(LinkableModel, )
+import { CommentableModel } from './commentable-model';
 
 //Collection to store comments
 export const CommentsCollection = new Mongo.Collection("comments");
