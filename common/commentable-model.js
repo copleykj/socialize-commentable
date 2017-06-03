@@ -1,5 +1,5 @@
 import { _ } from 'meteor/underscore';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import SimpleSchema from 'simpl-schema';
 import { Comment, CommentsCollection } from './comment-model';
 
 
@@ -67,6 +67,6 @@ CommentableModel.CommentableSchema = new SimpleSchema({
     "_commentCount":{
         type:Number,
         defaultValue:0,
-        custom: SimpleSchema.denyUntrusted
+        custom: SimpleSchema.denyUntrusted,
     }
 });

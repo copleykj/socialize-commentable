@@ -14,7 +14,7 @@ meteor add socialize:commentable
 import { Mongo } from 'meteor/mongo';
 import { CommentableModel } from 'meteor/socialize-commentable';
 import { LinkParent, LinkableModel } from 'meteor/socialize-linkable';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import SimpleSchema from 'simpl-schema';
 
 //define the collection to hold products
 const PhotosCollection = new Mongo.Collection("photos");
