@@ -2,6 +2,11 @@
 
 This package enables the creation of models that can be commented on. For example a photo in an photo album could have comments, but also a post to a users feed could as well. Rather than maintaining a photo comments collection and a post comments collection we can implement CommentableModel on our `Post` and `Photo` models and then use it's new methods to store and retrieve comments and information about them, linked to these models.
 
+## Supporting the Project ##
+In the spirit of keeping this and all of the packages in the [Socialize](https://atmospherejs.com/socialize) set alive, I ask that if you find this package useful, please donate to it's development.
+
+[Bitcoin](https://www.coinbase.com/checkouts/4a52f56a76e565c552b6ecf118461287) / [Patreon](https://www.patreon.com/user?u=4866588) / [Paypal](https://www.paypal.me/copleykj)
+
 ## Installation ##
 
 ```
@@ -76,8 +81,3 @@ foundPhoto.comments().forEach((comment) => {
     console.log(`${comment.user().username}: ${comment.body}`);
 });
 ```
-
-# Supporting the Project #
-In the spirit of keeping this and all of the packages in the [Socialize](https://atmospherejs.com/socialize) set alive, I ask that if you find this package useful, please donate to it's development.
-
-[Paypal](https://www.paypal.me/copleykj) /  [Bitcoin](https://www.coinbase.com/checkouts/4a52f56a76e565c552b6ecf118461287)
