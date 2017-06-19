@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import SimpleSchema from 'simpl-schema';
 import { LinkableModel, LinkParent } from 'meteor/socialize:linkable-model';
 import { LikeableModel } from 'meteor/socialize:likeable';
 import { CommentableModel } from './commentable-model';

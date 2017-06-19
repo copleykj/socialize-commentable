@@ -1,8 +1,8 @@
 /* eslint-disable import/no-unresolved */
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { LinkParent } from 'meteor/socialize:linkable-model';
+import SimpleSchema from 'simpl-schema';
 import { Comment, CommentsCollection } from './comment-model';
 
 
