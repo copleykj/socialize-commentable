@@ -1,16 +1,19 @@
+/* eslint-disable import/no-unresolved */
+import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { LinkParent } from 'meteor/socialize:linkable-model';
 import { Comment, CommentsCollection } from './comment-model';
 
 
 /**
  * CommentableModel - a mixin providing commentable behavior for a model
  */
-export const CommentableModel = Base => class extends Base {
-    constructor(document){
+export const CommentableModel = Base => class extends Base { // eslint-disable-line
+    constructor(document) {
         super(document);
-        if(!(this instanceof ParentLink)){
-            throw new Meteor.Error("MustExtendParentLink", "LikeableModel must extend ParentLink from socialize:linkable-model");
+        if (!(this instanceof LinkParent)) {
+            throw new Meteor.Error('MustExtendParentLink', 'LikeableModel must extend LinkParent from socialize:linkable-model');
         }
     }
 
@@ -19,7 +22,7 @@ export const CommentableModel = Base => class extends Base {
      * @param {String} body The body text of the comment
      */
     addComment(body) {
-        var comment = this.getLinkObject();
+        const comment = this.getLinkObject();
         comment.body = body;
 
         new Comment(comment).save();
@@ -34,7 +37,7 @@ export const CommentableModel = Base => class extends Base {
      * @returns {Mongo.Cursor} A cursor that returns comment instances
      */
     comments(limit, skip, sortBy, sortOrder) {
-        var options = {};
+        const options = {};
 
         if (limit) {
             options.limit = limit;
@@ -44,12 +47,12 @@ export const CommentableModel = Base => class extends Base {
             options.skip = skip;
         }
 
-        if(sortBy && sortOrder){
+        if (sortBy && sortOrder) {
             options.sort = {};
             options.sort[sortBy] = sortOrder;
         }
 
-        return CommentsCollection.find({linkedObjectId:this._id}, options);
+        return CommentsCollection.find({ linkedObjectId: this._id }, options);
     }
 
     /**
@@ -57,16 +60,16 @@ export const CommentableModel = Base => class extends Base {
      * @returns {Number} The number of comments
      */
     commentCount() {
-        //Necessary  for backwards compatibility with old comments
+        // Necessary  for backwards compatibility with old comments
         return _.isArray(this._commentCount) ? this._commentCount.length : this._commentCount || 0;
     }
 };
 
-//create a schema which can be attached to other commentable types
+// create a schema which can be attached to other commentable types
 CommentableModel.CommentableSchema = new SimpleSchema({
-    "_commentCount":{
-        type:Number,
-        defaultValue:0,
-        custom: SimpleSchema.denyUntrusted
-    }
+    _commentCount: {
+        type: Number,
+        defaultValue: 0,
+        custom: SimpleSchema.denyUntrusted,
+    },
 });
