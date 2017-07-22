@@ -1,27 +1,31 @@
-import { CommentsCollection } from '../common/comment-model';
+/* eslint-disable import/no-unresolved */
 import { LinkableModel } from 'meteor/socialize:linkable-model';
+import { LikesCollection } from 'meteor/socialize:likeable';
+/* eslint-enable import/no-unresolved */
+
+import { CommentsCollection } from '../common/comment-model';
 
 CommentsCollection.allow({
-    insert: function (userId, comment) {
+    insert(userId, comment) {
         return userId && comment.checkOwnership();
     },
-    remove: function (userId, comment) {
+    remove(userId, comment) {
         return userId && comment.checkOwnership();
-    }
+    },
 });
 
-CommentsCollection.after.insert(function (userId, comment) {
-    //when a comment is added, update the comment count for the object being commented on
-    var collection = LinkableModel.getCollectionForRegisteredType(comment.objectType);
-    collection && collection.update(comment.linkedObjectId, {$inc:{_commentCount:1}});
+CommentsCollection.after.insert(function afterInsert(userId, comment) {
+    // when a comment is added, update the comment count for the object being commented on
+    const collection = LinkableModel.getCollectionForRegisteredType(comment.objectType);
+    collection && collection.update(comment.linkedObjectId, { $inc: { _commentCount: 1 } });
 });
 
-CommentsCollection.after.remove(function (userId, comment) {
-    //when a comment is deleted, update the comment count for the object being commented on
-    var collection = LinkableModel.getCollectionForRegisteredType(comment.objectType);
-    collection && collection.update(comment.linkedObjectId, {$inc:{_commentCount:-1}});
+CommentsCollection.after.remove(function afterRemove(userId, comment) {
+    // when a comment is deleted, update the comment count for the object being commented on
+    const collection = LinkableModel.getCollectionForRegisteredType(comment.objectType);
+    collection && collection.update(comment.linkedObjectId, { $inc: { _commentCount: -1 } });
 
-    //if there are any likes or comments for the deleted comment, delete them
-    Meteor.comments.remove({linkedObjectId:comment._id});
-    Meteor.likes.remove({linkedObjectId:comment._id});
+    // if there are any likes or comments for the deleted comment, delete them
+    CommentsCollection.remove({ linkedObjectId: comment._id });
+    LikesCollection.remove({ linkedObjectId: comment._id });
 });

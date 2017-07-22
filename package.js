@@ -1,20 +1,20 @@
+/* global Package */
 Package.describe({
-    name: "socialize:commentable",
-    summary: "A package for implementing social commenting",
-    version: "1.0.0",
-    git: "https://github.com/copleykj/socialize-commentable.git"
+    name: 'socialize:commentable',
+    summary: 'A package for implementing social commenting',
+    version: '1.0.0',
+    git: 'https://github.com/copleykj/socialize-commentable.git',
 });
 
-Package.onUse(function(api) {
-    api.versionsFrom("1.3");
+Package.onUse(function _(api) {
+    api.versionsFrom('1.3');
 
-    api.use("ecmascript");
+    api.use('ecmascript');
 
-    api.use("socialize:likeable@1.0.0");
+    api.use('socialize:likeable@1.0.0');
 
-    api.imply("socialize:likeable");
+    api.imply('socialize:likeable');
 
-
-    api.mainModule("server/server.js", 'server');
-    api.mainModule("common/common.js");
+    api.mainModule('server/server.js', 'server');
+    api.mainModule('common/common.js');
 });
