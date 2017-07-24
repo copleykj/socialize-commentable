@@ -7,7 +7,7 @@ import { LikeableModel } from 'meteor/socialize:likeable';
 import { CommentableModel } from './commentable-model';
 
 // Collection to store comments
-export const CommentsCollection = new Mongo.Collection('comments');
+export const CommentsCollection = new Mongo.Collection('socialize:comments');
 
 // Create the schema for the comment
 const CommentSchema = new SimpleSchema({
