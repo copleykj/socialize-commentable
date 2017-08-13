@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved */
-import { LinkableModel } from 'meteor/socialize:linkable-model';
 import { LikesCollection } from 'meteor/socialize:likeable';
 /* eslint-enable import/no-unresolved */
 
