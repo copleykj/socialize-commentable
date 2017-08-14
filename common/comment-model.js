@@ -51,7 +51,6 @@ export class Comment extends CommentableModel(LikeableModel(LinkableModel(LinkPa
     user() {
         return Meteor.users.findOne(this.userId);
     }
-
 }
 
 // attach the schema
@@ -66,3 +65,5 @@ Comment.appendSchema(LinkableModel.LinkableSchema);
 Comment.appendSchema(CommentableModel.CommentableSchema);
 // add fields to schema required by LikeableModel
 Comment.appendSchema(LikeableModel.LikeableSchema);
+
+LinkableModel.registerParentModel(Comment);
