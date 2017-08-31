@@ -6,7 +6,7 @@ CommentableModel is used to add commenting capabilities to a model that is built
 
 **addComment(body)** - create a comment that is linked this instance of a model.
 
-**comments(limit, skip, sortKey, sortOrder)** - returns a cursor of comments that are linked to this instance of a model.
+**comments(options)** - returns a cursor of comments that are linked to this instance of a model. Signature of `options` param is the same as you would pass to `Collection.find()`.
 
 **commentCount()** - returns the number of comments for this instance of a model.
 
