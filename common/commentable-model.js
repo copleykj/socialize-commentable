@@ -25,7 +25,9 @@ export const CommentableModel = Base => class extends Base { // eslint-disable-l
         const comment = this.getLinkObject();
         comment.body = body;
 
-        new Comment(comment).save();
+        new Comment(comment).save({
+            channel: `comments::${this._id}`,
+        });
     }
 
     /**
@@ -34,7 +36,11 @@ export const CommentableModel = Base => class extends Base { // eslint-disable-l
      * @returns {Mongo.Cursor} A cursor that returns comment instances
      */
     comments(options = {}) {
-        return CommentsCollection.find({ linkedObjectId: this._id }, options);
+        const newOptions = {
+            ...options,
+            channel: `comments::${this._id}`,
+        };
+        return CommentsCollection.find({ linkedObjectId: this._id }, newOptions);
     }
 
     /**
