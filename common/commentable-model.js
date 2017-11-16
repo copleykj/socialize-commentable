@@ -26,7 +26,7 @@ export const CommentableModel = Base => class extends Base { // eslint-disable-l
         comment.body = body;
 
         new Comment(comment).save({
-            channel: `comments::${this._id}`,
+            namespace: `${this.getCollectionName()}::${this._id}`,
         });
     }
 
@@ -38,7 +38,7 @@ export const CommentableModel = Base => class extends Base { // eslint-disable-l
     comments(options = {}) {
         const newOptions = {
             ...options,
-            channel: `comments::${this._id}`,
+            namespace: `${this.getCollectionName()}::${this._id}`,
         };
         return CommentsCollection.find({ linkedObjectId: this._id }, newOptions);
     }
