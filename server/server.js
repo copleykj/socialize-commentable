@@ -25,10 +25,6 @@ CommentsCollection.after.remove(function afterRemove(userId, comment) {
     collection && collection.update(comment.linkedObjectId, { $inc: { _commentCount: -1 } });
 
     // if there are any likes or comments for the deleted comment, delete them
-    CommentsCollection.remove({ linkedObjectId: comment._id }, {
-        namespace: `${collection._name}::${comment._id}`,
-    });
-    LikesCollection.remove({ linkedObjectId: comment._id }, {
-        namespace: `${collection._name}::${comment._id}`,
-    });
+    CommentsCollection.remove({ linkedObjectId: comment._id });
+    LikesCollection.remove({ linkedObjectId: comment._id });
 });
