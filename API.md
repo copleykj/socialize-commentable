@@ -8,8 +8,6 @@ CommentableModel is used to add commenting capabilities to a model that is built
 
 **comments(options)** - returns a cursor of comments that are linked to this instance of a model. Signature of `options` param is the same as you would pass to `Collection.find()`.
 
-**commentCount()** - returns the number of comments for this instance of a model.
-
 
 ## Comment  - Extends [LinkableModel](https://github.com/copleykj/socialize-linkable-model) - Implements [CommentableModel](https://github.com/copleykj/socialize-commentable), [LikeableModel](https://github.com/copleykj/socialize-likeable)##
 
