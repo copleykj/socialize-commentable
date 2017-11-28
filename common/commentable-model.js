@@ -39,7 +39,7 @@ export const CommentableModel = Base => class extends Base { // eslint-disable-l
 
 // create a schema which can be attached to other commentable types
 CommentableModel.CommentableSchema = new SimpleSchema({
-    _commentCount: {
+    commentCount: {
         type: Number,
         defaultValue: 0,
         custom: SimpleSchema.denyUntrusted,
