@@ -1,6 +1,5 @@
 /* eslint-disable import/no-unresolved */
 import { Meteor } from 'meteor/meteor';
-import { _ } from 'meteor/underscore';
 import { LinkParent } from 'meteor/socialize:linkable-model';
 import SimpleSchema from 'simpl-schema';
 import { Comment, CommentsCollection } from './comment-model';
@@ -43,7 +42,7 @@ export const CommentableModel = Base => class extends Base { // eslint-disable-l
      */
     commentCount() {
         // Necessary  for backwards compatibility with old comments
-        return _.isArray(this._commentCount) ? this._commentCount.length : this._commentCount || 0;
+        return Array.isArray(this._commentCount) ? this._commentCount.length : this._commentCount || 0;
     }
 };
 
