@@ -22,18 +22,28 @@ const CommentSchema = new SimpleSchema({
         },
         denyUpdate: true,
     },
-    date: {
+    createAt: {
         type: Date,
         autoValue() {
             if (this.isInsert) {
-                return new Date();
+                return ServerTime.date();
             }
             return undefined;
         },
+        index: -1,
         denyUpdate: true,
     },
+    // Latest update date
+    updatedAt: {
+        type: Date,
+        optional: true,
+        autoValue() {
+          if (this.isInsert || this.isUpdate)
+            return ServerTime.date();
+        },
+    },
     body: {
-        type: String,
+        type: SimpleSchema.oneOf(String, Object),
     },
 });
 
