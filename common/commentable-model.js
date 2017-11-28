@@ -35,15 +35,6 @@ export const CommentableModel = Base => class extends Base { // eslint-disable-l
     comments(options = {}) {
         return CommentsCollection.find({ linkedObjectId: this._id }, options);
     }
-
-    /**
-     * The number of comments on the commentable object
-     * @returns {Number} The number of comments
-     */
-    commentCount() {
-        // Necessary  for backwards compatibility with old comments
-        return this._commentCount;
-    }
 };
 
 // create a schema which can be attached to other commentable types
