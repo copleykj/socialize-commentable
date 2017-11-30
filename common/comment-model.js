@@ -4,6 +4,7 @@ import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import { LinkableModel, LinkParent } from 'meteor/socialize:linkable-model';
 import { LikeableModel } from 'meteor/socialize:likeable';
+import { ServerTime } from 'meteor/socialize:server-time';
 import { CommentableModel } from './commentable-model';
 
 // Collection to store comments
@@ -38,7 +39,6 @@ const CommentSchema = new SimpleSchema({
         type: Date,
         optional: true,
         autoValue() {
-          if (this.isInsert || this.isUpdate)
             return ServerTime.date();
         },
     },
