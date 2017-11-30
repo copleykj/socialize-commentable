@@ -16,13 +16,13 @@ CommentsCollection.allow({
 CommentsCollection.after.insert(function afterInsert(userId, comment) {
     // when a comment is added, update the comment count for the object being commented on
     const collection = this.transform().getCollectionForParentLink();
-    collection && collection.update(comment.linkedObjectId, { $inc: { commentCount: 1 } });
+    collection && collection.update({ _id: comment.linkedObjectId }, { $inc: { commentCount: 1 } });
 });
 
 CommentsCollection.after.remove(function afterRemove(userId, comment) {
     // when a comment is deleted, update the comment count for the object being commented on
     const collection = this.transform().getCollectionForParentLink();
-    collection && collection.update(comment.linkedObjectId, { $inc: { commentCount: -1 } });
+    collection && collection.update({ _id: comment.linkedObjectId }, { $inc: { commentCount: -1 } });
 
     // if there are any likes or comments for the deleted comment, delete them
     CommentsCollection.remove({ linkedObjectId: comment._id });

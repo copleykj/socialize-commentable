@@ -10,6 +10,32 @@ import { CommentableModel } from './commentable-model';
 // Collection to store comments
 export const CommentsCollection = new Mongo.Collection('socialize:comments');
 
+if (CommentsCollection.configureRedisOplog) {
+    CommentsCollection.configureRedisOplog({
+        mutation(options, { selector, doc }) {
+            let linkedObjectId = (selector && selector.linkedObjectId) || (doc && doc.linkedObjectId);
+
+            if (!linkedObjectId && selector._id) {
+                const comment = CommentsCollection.findOne({ _id: selector._id }, { fields: { linkedObjectId: 1 } });
+                linkedObjectId = comment && comment.linkedObjectId;
+            }
+
+            if (linkedObjectId) {
+                Object.assign(options, {
+                    namespace: linkedObjectId,
+                });
+            }
+        },
+        cursor(options, selector) {
+            if (selector.linkedObjectId) {
+                Object.assign(options, {
+                    namespace: selector.linkedObjectId,
+                });
+            }
+        },
+    });
+}
+
 // Create the schema for the comment
 const CommentSchema = new SimpleSchema({
     userId: {
