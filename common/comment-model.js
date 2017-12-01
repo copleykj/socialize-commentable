@@ -85,7 +85,7 @@ export class Comment extends CommentableModel(LikeableModel(LinkableModel(LinkPa
      * @returns {User} A User instance representing the commenting user.
      */
     user() {
-        return Meteor.users.findOne(this.userId);
+        return Meteor.users.findOne({ _id: this.userId });
     }
 }
 
