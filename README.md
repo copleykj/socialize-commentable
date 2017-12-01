@@ -73,9 +73,6 @@ let foundPhoto = PhotosCollection.findOne();
 //Post a comment that will be linked to the photo.
 foundPhoto.addComment("This was so much fun!");
 
-//Find out how many comments the photo has.
-foundPhoto.commentCount(); // -> 1
-
 //Get a cursor of comments for this photo
 foundPhoto.comments().forEach((comment) => {
     console.log(`${comment.user().username}: ${comment.body}`);
