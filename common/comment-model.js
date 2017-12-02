@@ -49,7 +49,7 @@ const CommentSchema = new SimpleSchema({
         },
         denyUpdate: true,
     },
-    createAt: {
+    createdAt: {
         type: Date,
         autoValue() {
             if (this.isInsert) {
