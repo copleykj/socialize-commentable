@@ -3,6 +3,7 @@ import { LikesCollection } from 'meteor/socialize:likeable';
 /* eslint-enable import/no-unresolved */
 
 import { CommentsCollection } from '../common/comment-model';
+import './publications.js';
 
 CommentsCollection.allow({
     insert(userId, comment) {
