@@ -15,4 +15,12 @@ A comment is a record of a user commenting on an instance of a model with a refe
 
 ### Instance Methods ###
 
-**user()** - Returns an instance of the user that made the comment,
+**user()** - Returns an instance of the user that made the comment.
+
+## Publications ##
+
+**socialize.commentsFor(linkedObjectId, options = { limit: 10, sort: { createdAt: -1 } })** - Publishes the comments and their related data for a certain object.
+
+```javascript
+Meteor.subscribe('socialize.commentsFor', post._id, { limit: 5, skip: 2 });
+```
