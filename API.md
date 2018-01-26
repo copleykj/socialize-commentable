@@ -19,8 +19,10 @@ A comment is a record of a user commenting on an instance of a model with a refe
 
 ## Publications ##
 
-**socialize.commentsFor(linkedObjectId, options = { limit: 10, sort: { createdAt: -1 } })** - Publishes the comments and their related data for a certain object.
+**socialize.commentsFor(linkedObjectId, publicComments = true, options = { limit: 10, sort: { createdAt: -1 } })** - Publishes the comments and their related data for a certain object.
 
 ```javascript
-Meteor.subscribe('socialize.commentsFor', post._id, { limit: 5, skip: 2 });
+Meteor.subscribe('socialize.commentsFor', post._id, false, { limit: 5, skip: 2 });
 ```
+
+`publicComments` allows to hide or display comments to anonymous users.
