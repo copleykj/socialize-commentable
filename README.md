@@ -1,41 +1,95 @@
 # Commentable #
 
-A package enabling the creation of models that can be commented on. For example a photo in an photo album could have comments, but also a post to a users feed could as well. Rather than maintaining a photo comments collection and a post comments collection we can implement CommentableModel on our `Post` and `Photo` models and then use it's new methds `addcomment`, `comments`, and `commentCount`.
+This package enables the creation of models that can be commented on. For example a photo in an photo album could have comments, but also a post to a users feed could as well. Rather than maintaining a photo comments collection and a post comments collection we can implement CommentableModel on our `Post` and `Photo` models and then use it's new methods to store and retrieve comments and information about them, linked to these models.
 
-## CommentableModel ##
+## Supporting the Project ##
+In the spirit of keeping this and all of the packages in the [Socialize](https://atmospherejs.com/socialize) set alive, I ask that if you find this package useful, please donate to it's development.
 
-CommentableModel is used to add commenting capabilities to a model that is built on Socialize's `BaseModel` class. To make a model commentable just call `CommentableModel.makeCommentable(Model, "typeAsString")` passing in a model class and a string that will be used to tag the comment records for later retrieval.
+Litecoin: LXLBD9sC5dV79eQkwj7tFusUHvJA5nhuD3 / [Patreon](https://www.patreon.com/user?u=4866588) / [Paypal](https://www.paypal.me/copleykj)
 
-```javascript
-var Post = BaseModel.extendAndSetupCollection("posts");
+## Installation ##
 
-CommentableModel.makeCommentable(Post, "post");
+This package relies on the npm package `simpl-schema` so you will need to make sure it is installed as well.
+
+```shell
+$ meteor npm install --save simpl-schema
+$ meteor add socialize:commentable
 ```
 
-This will add the following methods to the prototype of the model.
-
-**addComment(body)** - create a comment that is linked this instance of a model.
-
-**comments(limit, skip, sortKey, sortOrder)** - returns a cursor of comments that are linked to this instance of a model.
-
-**commentCount()** - returns the number of comments for this instance of a model.
+## Basic Usage ##
 
 ```javascript
-var post = Meteor.posts.findOne();
+import { Mongo } from 'meteor/mongo';
+import { CommentableModel } from 'meteor/socialize-commentable';
+import { LinkParent, LinkableModel } from 'meteor/socialize-linkable';
+import SimpleSchema from 'simpl-schema';
 
-post.addComment("Post Comments are so cool, and easy to implement with the socialize:commentable package");
+//define the collection to hold products
+const PhotosCollection = new Mongo.Collection("photos");
 
-post.comments(null, null, "date", -1).forEach(function(comment){
-    console.log(comment.user().username, ": ", comment.body);
+//define the schema for a product
+const PhotosSchema = new SimpleSchema({
+    "userId":{
+        type:String,
+        regEx:SimpleSchema.RegEx.Id,
+        autoValue:function () {
+            if(this.isInsert){
+                return this.userId;
+            }
+        },
+        denyUpdate:true
+    },
+    "date":{
+        type:Date,
+        autoValue:function() {
+            if(this.isInsert){
+                return new Date();
+            }
+        },
+        denyUpdate:true
+    }
+    //actual schema truncated for brevity
 });
 
-post.commentCount(); //=> 0
+//Create a product class extending LikeableModel and LinkParent
+class Photo extends CommentableModel(LinkParent) {
+    //methods here
+}
+
+//Attach the collection to the model so we can use BaseModel's CRUD methods
+Photo.attachCollection(PhotosCollection);
+
+Photo.attachSchema(PhotosSchema);
+Photo.attachSchema(CommentableModel.CommentableSchema);
+
+//Register the Model as a potential Parent of a LinkableModel
+LinkableModel.registerParentModel(Photo);
+
+
+//Create a new product and save it to the database using BaseModel's save method.
+new Photo({caption:"Meteor Camp 2016!", cloudinaryId:"sL0Jbf3gBaoeubs3G822WQqwp"}).save();
+
+//Get an instance of Product using a findOne call.
+let foundPhoto = PhotosCollection.findOne();
+
+//subscribe to the comments for this particular photo
+Meteor.subscribe('socialize.commmentsFor', foundPhoto._id);
+
+//Post a comment that will be linked to the photo.
+foundPhoto.addComment("This was so much fun!");
+
+//Get a cursor of comments for this photo
+foundPhoto.comments().forEach((comment) => {
+    console.log(`${comment.user().username}: ${comment.body}`);
+});
 ```
 
-## Comment  - Extends [LinkableModel](https://github.com/copleykj/socialize-linkable-model) - Implements [CommentableModel](https://github.com/copleykj/socialize-commentable), [LikeableModel](https://github.com/copleykj/socialize-likeable)##
+For a more in depth explanation of how to use this package see [API.md](API.md)
 
-A comment is a record of a user commenting on an instance of a model with a reference to that instance. The `Comment` model also implements `CommentableModel` and `LikeableModel` so that comments can be liked as well as commented on. If you choose to use the package in this fashion, be careful how far you allow the nesting of comments.
+## Scalability - Redis Oplog ##
 
-### Instance Methods ###
+This package contains a preliminary implementation of [cultofcoders:redis-oplog][1]'s namespaces to provide reactive scalability as an alternative to Meteor's `livedata`. Use of redis-oplog is not required and will not engage until you install the [cultofcoders:redis-oplog][1] package and configure it.
 
-**user()** - Returns an instance of the user that made the comment,
+Due to the preliminary nature of this implementation, you may run into minor issues. Please report any issues you find to GitHub so that they can be fixed.
+
+[1]:https://github.com/cultofcoders/redis-oplog
