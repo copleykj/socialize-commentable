@@ -59,6 +59,9 @@ class Photo extends CommentableModel(LinkParent) {
 //Attach the collection to the model so we can use BaseModel's CRUD methods
 Photo.attachCollection(PhotosCollection);
 
+Photo.attachSchema(PhotosSchema);
+Photo.attachSchema(CommentableModel.CommentableSchema);
+
 //Register the Model as a potential Parent of a LinkableModel
 LinkableModel.registerParentModel(Photo);
 
@@ -68,6 +71,9 @@ new Photo({caption:"Meteor Camp 2016!", cloudinaryId:"sL0Jbf3gBaoeubs3G822WQqwp"
 
 //Get an instance of Product using a findOne call.
 let foundPhoto = PhotosCollection.findOne();
+
+//subscribe to the comments for this particular photo
+Meteor.subscribe('socialize.commmentsFor', foundPhoto._id);
 
 //Post a comment that will be linked to the photo.
 foundPhoto.addComment("This was so much fun!");
