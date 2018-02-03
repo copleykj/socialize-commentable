@@ -5,7 +5,7 @@ This package enables the creation of models that can be commented on. For exampl
 ## Supporting the Project ##
 In the spirit of keeping this and all of the packages in the [Socialize](https://atmospherejs.com/socialize) set alive, I ask that if you find this package useful, please donate to it's development.
 
-[Bitcoin](https://www.coinbase.com/checkouts/4a52f56a76e565c552b6ecf118461287) / [Patreon](https://www.patreon.com/user?u=4866588) / [Paypal](https://www.paypal.me/copleykj)
+Litecoin: LXLBD9sC5dV79eQkwj7tFusUHvJA5nhuD3 / [Patreon](https://www.patreon.com/user?u=4866588) / [Paypal](https://www.paypal.me/copleykj)
 
 ## Installation ##
 
@@ -53,15 +53,14 @@ const PhotosSchema = new SimpleSchema({
 
 //Create a product class extending LikeableModel and LinkParent
 class Photo extends CommentableModel(LinkParent) {
-    constructor(document){
-        super(document);
-    }
-
-    //Add any instance(helper) methods here
+    //methods here
 }
 
 //Attach the collection to the model so we can use BaseModel's CRUD methods
 Photo.attachCollection(PhotosCollection);
+
+Photo.attachSchema(PhotosSchema);
+Photo.attachSchema(CommentableModel.CommentableSchema);
 
 //Register the Model as a potential Parent of a LinkableModel
 LinkableModel.registerParentModel(Photo);
@@ -72,6 +71,9 @@ new Photo({caption:"Meteor Camp 2016!", cloudinaryId:"sL0Jbf3gBaoeubs3G822WQqwp"
 
 //Get an instance of Product using a findOne call.
 let foundPhoto = PhotosCollection.findOne();
+
+//subscribe to the comments for this particular photo
+Meteor.subscribe('socialize.commmentsFor', foundPhoto._id);
 
 //Post a comment that will be linked to the photo.
 foundPhoto.addComment("This was so much fun!");
