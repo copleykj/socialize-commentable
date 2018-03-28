@@ -2,7 +2,7 @@
 Package.describe({
     name: 'socialize:commentable',
     summary: 'A package for implementing social commenting',
-    version: '1.0.0',
+    version: '1.0.1',
     git: 'https://github.com/copleykj/socialize-commentable.git',
 });
 
