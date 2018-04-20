@@ -11,7 +11,6 @@ Package.onUse(function _(api) {
 
     api.use([
         'socialize:likeable@1.0.0',
-        'socialize:user-blocking@1.0.0',
         'reywood:publish-composite@1.5.2',
     ]);
 
