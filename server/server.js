@@ -2,7 +2,7 @@
 import { LikesCollection } from 'meteor/socialize:likeable';
 /* eslint-enable import/no-unresolved */
 
-import { CommentsCollection } from '../common/comment-model';
+import { CommentsCollection } from '../common/common.js';
 import './publications.js';
 
 CommentsCollection.allow({
