@@ -114,7 +114,7 @@ foundPhoto.comments().forEach((comment) => {
 });
 ```
 
-For a more in depth explanation of how to use this package see [API.md](API.md)
+For a more in depth explanation of how to use this package see [API.md](api)
 
 ## Scalability - Redis Oplog
 
@@ -123,3 +123,4 @@ This package implements [cultofcoders:redis-oplog][redis-oplog]'s namespaces to 
 [meteor]: https://meteor.com
 [redis-oplog]:https://github.com/cultofcoders/redis-oplog
 [socialize]: https://atmospherejs.com/socialize
+[api]: https://github.com/copleykj/socialize-commentable/blob/master/API.md
