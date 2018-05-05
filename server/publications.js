@@ -5,7 +5,7 @@ import { publishComposite } from 'meteor/reywood:publish-composite';
 import { User } from 'meteor/socialize:user-model';
 import { LikesCollection } from 'meteor/socialize:likeable';
 
-import { CommentsCollection } from '../common/comment-model.js';
+import { CommentsCollection } from '../common/common.js';
 
 
 const optionsArgumentCheck = {
