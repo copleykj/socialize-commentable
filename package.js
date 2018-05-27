@@ -10,8 +10,8 @@ Package.onUse(function _(api) {
     api.versionsFrom('1.3');
 
     api.use([
-        'socialize:likeable@1.0.0',
-        'reywood:publish-composite@1.5.2',
+        'socialize:likeable@1.0.2',
+        'reywood:publish-composite@1.6.0',
     ]);
 
     api.imply('socialize:likeable');
