@@ -1,10 +1,24 @@
 ## CommentableModel ##
 
-CommentableModel is used to add commenting capabilities to a model that is built on Socialize's `BaseModel` class. To make a model commentable just call `CommentableModel.makeCommentable(Model, "typeAsString")` passing in a model class and a string that will be used to tag the comment records for later retrieval.
+CommentableModel is used to add commenting capabilities to a model that is built on Socialize's `BaseModel` class. To make a model commentable you just need to extend CommentableModel and pass in the LinkParent class in a mixin pattern.
+
+```javascript
+class Thing extends CommentableModel(LinkParent){
+    //instance methods here
+}
+```
+
+This pattern is useful when you want to implement several behaviors such as Commentable and Likeable
+
+```javascript
+class Thing extends CommentableModel(LikeableModel(LinkParent)){
+    //instance methods here
+}
+```
 
 ### Instance Methods ###
 
-**addComment(body)** - create a comment that is linked this instance of a model.
+**addComment(body)** - create a comment that is linked to this instance of a model.
 
 **comments(options)** - returns a cursor of comments that are linked to this instance of a model. Signature of `options` param is the same as you would pass to `Collection.find()`.
 
