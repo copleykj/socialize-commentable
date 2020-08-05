@@ -7,14 +7,14 @@ Package.describe({
 });
 
 Package.onUse(function _(api) {
-    api.versionsFrom('1.3');
+  api.versionsFrom('1.3');
 
     api.use([
         'socialize:likeable@1.0.3',
         'reywood:publish-composite@1.7.3',
     ]);
 
-    api.imply('socialize:likeable');
+  api.imply('socialize:likeable');
 
     api.mainModule('server/server.js', 'server');
     api.mainModule('common/common.js', 'client');
