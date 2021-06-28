@@ -7,10 +7,10 @@ Package.describe({
 });
 
 Package.onUse(function _(api) {
-    api.versionsFrom('2.3');
+    api.versionsFrom(['1.10.2', '2.3']);
 
     api.use([
-        'socialize:likeable@1.0.4',
+        'socialize:likeable@1.0.5',
         'reywood:publish-composite@1.7.3',
     ]);
 
